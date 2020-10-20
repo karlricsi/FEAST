@@ -2,13 +2,10 @@ package hu.karlricsi;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import hu.karlricsi.dao.DAO;
 import hu.karlricsi.dao.DAOException;
@@ -30,10 +27,7 @@ public class FeastController {
 	}
 
 	@RequestMapping("/order")
-	public String order(ModelMap model, HttpServletResponse response,
-			@CookieValue(value = "userId", defaultValue = "0") int userId) {// , @RequestParam(value = "ppp",
-																			// defaultValue = "0") String ppp) {
-		response.addCookie(new Cookie("userId", "2"));
+	public String order(ModelMap model) {
 		try {
 			List<User> users;
 			users = usersDAO.findAll();

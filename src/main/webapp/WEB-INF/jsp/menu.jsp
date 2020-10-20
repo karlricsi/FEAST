@@ -6,6 +6,7 @@
 	<meta charset="UTF-8">
 		<title>FEAST Menü</title>
 		<script src='js/annalogJs.js'></script>
+		<script src='js/annalogJsTags.js'></script>
 	</head>
 	<body>
 		<annalog:application>

@@ -6,6 +6,7 @@
 	<meta charset="UTF-8">
 		<title>FEAST Fogyasztás rögzítés</title>
 		<script src='js/annalogJs.js'></script>
+		<script src='js/annalogJsTags.js'></script>
 		<style>
 #menudiv {
 	width: calc(70% - 10px);

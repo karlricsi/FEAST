@@ -1,5 +1,7 @@
 'use strict';
 
+document.addEventListener('DOMContentLoaded', _ => new Annalog());
+
 class Model {
 
 	constructor(name, value, synchronized) {
@@ -201,6 +203,7 @@ class Annalog {
 	constructor() {
 		this.alDom = document.getElementsByTagName('al-application')[0];
 		this.models = new Models();
+		this.tags = new Tags(this);
 		document.body.removeChild(document.getElementsByTagName('al-application')[0]);
 		this.constructDomTree(this.alDom.querySelector('[data-name="al-mainView"]'), document.body);
 		window.addEventListener('storage', event => {
@@ -221,33 +224,20 @@ class Annalog {
 
 	constructDomTree(start, target) {
 		Array.from(start.childNodes).forEach(node => {
-			if (node.nodeName.substring(0, 3) == 'AL-') {
+			if (node.nodeName.substring(0, 3) == 'AL-')
+				this.tags[node.localName.substring(3)](node);
+			/*{
 				switch (node.localName) {
 					case 'al-model':
-						let value = node.textContent;
-						if (node.hasAttribute('data-number'))
-							value = +value;
-						this.models.addModel(node.dataset.name, value, node.hasAttribute('data-synchronized'));
+						this.tags["model"](node);
 						break;
 					case 'al-fill':
-						let view = this.alDom.querySelector('al-view[data-name="' + node.dataset.view + '"]');
-						this.models.addModel(node.dataset.counter, 0);
-						for (let i = 0; i < this.models.getModel(node.dataset.model).length(); i++) {
-							this.models.setValue(i, node.dataset.counter);
-							Array.from(document.querySelectorAll(node.dataset.target)).forEach((selectedNode, j) => {
-								if (node.hasAttribute('data-groupnumberelement')) {
-									if (this.models.getValue(node.dataset.model, i, node.dataset.groupnumberelement) == j + 1)
-										this.constructDomTree(view, selectedNode);
-								} else
-									this.constructDomTree(view, selectedNode);
-							});
-						}
-						this.models.removeModel(node.dataset.counter);
+						this.tags["fill"](node);
 						break;
 					default:
 						break;
 				}
-			}
+			}*/
 			else {
 				let newTarget = target.appendChild(node.cloneNode(false));
 				function handler(node, models) {
@@ -297,5 +287,3 @@ class Annalog {
 	}
 
 }
-
-document.addEventListener('DOMContentLoaded', _ => new Annalog());
