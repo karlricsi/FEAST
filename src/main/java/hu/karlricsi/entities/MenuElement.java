@@ -3,14 +3,14 @@ package hu.karlricsi.entities;
 public class MenuElement {
 
 	private int id;
-	private MenuCategory category;
+	private int categoryId;
 	private String name;
 	private double price;
 
-	public MenuElement(int id, MenuCategory category, String name, double price) {
+	public MenuElement(int id, int categoryId, String name, double price) {
 		super();
 		this.id = id;
-		this.category = category;
+		this.categoryId = categoryId;
 		this.name = name;
 		this.price = price;
 	}
@@ -23,12 +23,12 @@ public class MenuElement {
 		this.id = id;
 	}
 
-	public MenuCategory getCategory() {
-		return category;
+	public int getCategory() {
+		return categoryId;
 	}
 
-	public void setCategory(MenuCategory category) {
-		this.category = category;
+	public void setCategory(int categoryId) {
+		this.categoryId = categoryId;
 	}
 
 	public String getName() {

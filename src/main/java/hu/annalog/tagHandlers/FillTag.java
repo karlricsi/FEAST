@@ -10,6 +10,7 @@ public class FillTag extends SimpleTagSupport {
 	private String counter = "";
 	private String view = "";
 	private String target = "";
+	private String groupNumberElement = "";
 
 	public void setModel(String model) {
 		this.model = model;
@@ -27,10 +28,16 @@ public class FillTag extends SimpleTagSupport {
 		this.target = targetId;
 	}
 
+	public void setGroupNumberElement(String groupNumberElement) {
+		this.groupNumberElement = groupNumberElement;
+	}
+
 	@Override
 	public void doTag() throws JspException, IOException {
-		this.getJspContext().getOut().print("<al-fill data-model=\"" + model + "\" data-counter=\"" + counter + "\" data-view=\""
-				+ view + "\" data-target=\"" + target + "\"></al-fill>");
+		this.getJspContext().getOut().print("<al-fill data-model=\"" + model + "\" data-counter=\"" + counter
+				+ "\" data-view=\"" + view + "\" data-target=\"" + target + "\""
+				+ (groupNumberElement.equals("") ? "" : " data-groupnumberelement=\"" + groupNumberElement + "\"")
+				+ "></al-fill>");
 	}
 
 }

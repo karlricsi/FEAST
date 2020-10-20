@@ -44,5 +44,8 @@
 		<attribute>
 			<name>target</name>
 		</attribute>
+		<attribute>
+			<name>groupNumberElement</name>
+		</attribute>
 	</tag>
 </taglib>

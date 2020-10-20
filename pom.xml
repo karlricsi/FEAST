@@ -13,6 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>FEAST</name>
 	<description>Factory Eating Administration SysTem</description>
+	<packaging>war</packaging>
 
 	<properties>
 		<java.version>11</java.version>

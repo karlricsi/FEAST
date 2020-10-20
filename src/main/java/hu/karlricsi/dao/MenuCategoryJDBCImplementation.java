@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import hu.karlricsi.entities.User;
+import hu.karlricsi.entities.MenuCategory;
 
-public class UserJDBCImplementation implements DAO<User> {
+public class MenuCategoryJDBCImplementation implements DAO<MenuCategory> {
 
 	@Autowired
 	private DataSource dataSource;
@@ -21,16 +21,17 @@ public class UserJDBCImplementation implements DAO<User> {
 	}
 
 	@Override
-	public List<User> findAll() throws DAOException {
+	public List<MenuCategory> findAll() throws DAOException {
 		try {
 			connection = dataSource.getConnection();
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM `feast`.`users` ORDER BY `name`");
+			PreparedStatement statement = connection
+					.prepareStatement("SELECT * FROM `feast`.`menu_categories` ORDER BY `category_id`");
 			ResultSet result = statement.executeQuery();
-			List<User> users = new ArrayList<>();
+			List<MenuCategory> categories = new ArrayList<>();
 			while (result.next()) {
-				users.add(new User(result.getInt("user_id"), result.getString("name")));
+				categories.add(new MenuCategory(result.getInt("category_id"), result.getString("category_name")));
 			}
-			return users;
+			return categories;
 		} catch (SQLException e) {
 			throw new DAOException(e);
 		} finally {
@@ -45,27 +46,27 @@ public class UserJDBCImplementation implements DAO<User> {
 	}
 
 	@Override
-	public User find(int id) throws DAOException {
+	public MenuCategory find(int id) throws DAOException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int insertAll(List<User> list) throws DAOException {
+	public int insertAll(List<MenuCategory> list) throws DAOException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int insert(User data) throws DAOException {
+	public int insert(MenuCategory data) throws DAOException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int update(User data) throws DAOException {
+	public int update(MenuCategory data) throws DAOException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int delete(User data) throws DAOException {
+	public int delete(MenuCategory data) throws DAOException {
 		throw new UnsupportedOperationException();
 	}
 

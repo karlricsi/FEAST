@@ -1,4 +1,5 @@
 'use strict';
+
 class Model {
 
 	constructor(name, value, synchronized) {
@@ -22,7 +23,7 @@ class Model {
 	}
 
 	getValues() {
-		return this.value
+		return this.value;
 	}
 
 	getReferences() {
@@ -34,10 +35,11 @@ class Model {
 	}
 
 	length() {
-		return this.value.length;
+		return this.value[0][0] == undefined ? this.value.length : 0;
 	}
 
 }
+
 class Models {
 
 	constructor() {
@@ -142,22 +144,34 @@ class Models {
 				executor(operators, factors, models);
 		}
 
-		let expressions = [/LENGTH\([A-Za-z0-9]*\)/g, /SUMPRODUCT\([A-Za-z0-9]*,[A-Za-z0-9]*,[A-Za-z0-9]*\)/g, /\(.*\)/g];
+		let expressions = [/LENGTH\([A-Za-z0-9]*\)/g, /SUM\([A-Za-z0-9]*,[A-Za-z0-9]*\)/g, /SUMPRODUCT\([A-Za-z0-9]*,[A-Za-z0-9]*,[A-Za-z0-9]*\)/g,
+			/\(.*\)/g];
 		let functions = [
-			function(models) {
+			function (models) {
 				return models.getModel(operation.slice(7, -1)).length();
 			},
-			function(models) {
+			function (models) {
+				let properties = operation.slice(4, -1).split(',');
+				let sum = 0;
+				if (models.getModel(properties[0]).length() > 0)
+					models.getModel(properties[0]).getValues().forEach(element => {
+						sum += element[properties[1]];
+					});
+				return sum;
+			},
+			function (models) {
 				let properties = operation.slice(11, -1).split(',');
 				let sumProduct = 0;
-				models.getModel(properties[0]).getValues().forEach(element => {
-					sumProduct += element[properties[1]] * element[properties[2]];
-				});
+				if (models.getModel(properties[0]).length() > 0)
+					models.getModel(properties[0]).getValues().forEach(element => {
+						sumProduct += element[properties[1]] * element[properties[2]];
+					});
 				return sumProduct;
 			},
-			function(models) {
+			function (models) {
 				return models.interpreter(match[0].slice(1, -1))[0][0];
-			}];
+			}
+		];
 		expressions.forEach((expression, index) => {
 			let match = operation.match(expression);
 			if (match != null)
@@ -181,6 +195,7 @@ class Models {
 	}
 
 }
+
 class Annalog {
 
 	constructor() {
@@ -212,15 +227,20 @@ class Annalog {
 						let value = node.textContent;
 						if (node.hasAttribute('data-number'))
 							value = +value;
-						this.models.addModel(node.dataset.name, node.textContent, node.hasAttribute('data-synchronized'));
+						this.models.addModel(node.dataset.name, value, node.hasAttribute('data-synchronized'));
 						break;
 					case 'al-fill':
 						let view = this.alDom.querySelector('al-view[data-name="' + node.dataset.view + '"]');
 						this.models.addModel(node.dataset.counter, 0);
-						for (let i = 0; i < this.models.getValues(node.dataset.model).length; i++) {
+						for (let i = 0; i < this.models.getModel(node.dataset.model).length(); i++) {
 							this.models.setValue(i, node.dataset.counter);
-							Array.from(document.querySelectorAll(node.dataset.target)).forEach(node =>
-								this.constructDomTree(view, node));
+							Array.from(document.querySelectorAll(node.dataset.target)).forEach((selectedNode, j) => {
+								if (node.hasAttribute('data-groupnumberelement')) {
+									if (this.models.getValue(node.dataset.model, i, node.dataset.groupnumberelement) == j + 1)
+										this.constructDomTree(view, selectedNode);
+								} else
+									this.constructDomTree(view, selectedNode);
+							});
 						}
 						this.models.removeModel(node.dataset.counter);
 						break;
@@ -260,11 +280,15 @@ class Annalog {
 						newTarget.textContent = newTarget.hasAttribute('data-operation') ? this.models.interpreter(newTarget.dataset.operation)[0][0] :
 							this.models.getValue(newTarget.dataset.model, newTarget.dataset.number, newTarget.dataset.element);
 					}
-					if(newTarget.attributes.length>0)
-						Array.from(newTarget.attributes).forEach(attr=>{
-							if (attr.value=='%model')
-								attr.nodeValue=attr.nodeValue.replace('%model',
+					if (newTarget.attributes.length > 0)
+						Array.from(newTarget.attributes).forEach(attr => {
+							if (attr.value.includes('%model')) {
+								attr.nodeValue = attr.nodeValue.replace('%model',
 									this.models.getValue(newTarget.dataset.attributemodel, newTarget.dataset.number, newTarget.dataset.element));
+								if (newTarget.hasAttribute('data-textelement'))
+									newTarget.text = this.models.getValue(newTarget.dataset.attributemodel, newTarget.dataset.number,
+										newTarget.dataset.textelement);
+							}
 						});
 				}
 				this.constructDomTree(node, newTarget);
@@ -273,6 +297,5 @@ class Annalog {
 	}
 
 }
-document.addEventListener('DOMContentLoaded', function() {
-	new Annalog();
-});
+
+document.addEventListener('DOMContentLoaded', _ => new Annalog());
