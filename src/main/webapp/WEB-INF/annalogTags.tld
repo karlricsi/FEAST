@@ -29,6 +29,34 @@
 		</attribute>
 	</tag>
 	<tag>
+		<name>controller</name>
+		<tag-class>hu.annalog.tagHandlers.ControllerTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>selector</name>
+		</attribute>
+		<attribute>
+			<name>event</name>
+		</attribute>
+		<attribute>
+			<name>target</name>
+		</attribute>
+	</tag>
+	<tag>
+		<name>ajax</name>
+		<tag-class>hu.annalog.tagHandlers.AjaxTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>method</name>
+		</attribute>
+		<attribute>
+			<name>url</name>
+		</attribute>
+		<attribute>
+			<name>data</name>
+		</attribute>
+	</tag>
+	<tag>
 		<name>fill</name>
 		<tag-class>hu.annalog.tagHandlers.FillTag</tag-class>
 		<body-content>scriptless</body-content>
@@ -46,6 +74,20 @@
 		</attribute>
 		<attribute>
 			<name>groupNumberElement</name>
+		</attribute>
+	</tag>
+	<tag>
+		<name>setclass</name>
+		<tag-class>hu.annalog.tagHandlers.SetClassTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>selector</name>
+		</attribute>
+		<attribute>
+			<name>className</name>
+		</attribute>
+		<attribute>
+			<name>doIt</name>
 		</attribute>
 	</tag>
 </taglib>

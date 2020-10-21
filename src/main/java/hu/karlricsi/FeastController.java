@@ -6,7 +6,10 @@ import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import hu.karlricsi.dao.DAO;
 import hu.karlricsi.dao.DAOException;
 import hu.karlricsi.entities.*;
@@ -20,6 +23,24 @@ public class FeastController {
 	private DAO<MenuCategory> categoriesDAO;
 	@Autowired
 	private DAO<MenuElement> foodsDAO;
+
+	@RequestMapping(value = "/process/addfood", method = RequestMethod.POST)
+	public ModelAndView addFood(@RequestBody String request) {
+		ModelAndView model = new ModelAndView();
+
+		System.out.println("addFood: " + request);
+
+		return model;
+	}
+
+	@RequestMapping(value = "/process/userselect", method = RequestMethod.POST)
+	public ModelAndView userSelect(@RequestBody String request) {
+		ModelAndView model = new ModelAndView();
+
+		System.out.println("userSelect: " + request);
+
+		return model;
+	}
 
 	@RequestMapping("/")
 	public String menu(ModelMap model) {

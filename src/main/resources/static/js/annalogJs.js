@@ -98,7 +98,7 @@ class Models {
 	}
 
 	interpreter(operation) {
-		function executor(operators, factors, models) {
+		let executor = (operators, factors, models) => {
 			let definedOperators = ['*', '/', '+', '-'];
 			let index = -1;
 			let i = 0;
@@ -149,10 +149,8 @@ class Models {
 		let expressions = [/LENGTH\([A-Za-z0-9]*\)/g, /SUM\([A-Za-z0-9]*,[A-Za-z0-9]*\)/g, /SUMPRODUCT\([A-Za-z0-9]*,[A-Za-z0-9]*,[A-Za-z0-9]*\)/g,
 			/\(.*\)/g];
 		let functions = [
-			function (models) {
-				return models.getModel(operation.slice(7, -1)).length();
-			},
-			function (models) {
+			models => models.getModel(operation.slice(7, -1)).length(),
+			models => {
 				let properties = operation.slice(4, -1).split(',');
 				let sum = 0;
 				if (models.getModel(properties[0]).length() > 0)
@@ -161,7 +159,7 @@ class Models {
 					});
 				return sum;
 			},
-			function (models) {
+			models => {
 				let properties = operation.slice(11, -1).split(',');
 				let sumProduct = 0;
 				if (models.getModel(properties[0]).length() > 0)
@@ -170,9 +168,7 @@ class Models {
 					});
 				return sumProduct;
 			},
-			function (models) {
-				return models.interpreter(match[0].slice(1, -1))[0][0];
-			}
+			models => models.interpreter(match[0].slice(1, -1))[0][0]
 		];
 		expressions.forEach((expression, index) => {
 			let match = operation.match(expression);
@@ -203,6 +199,8 @@ class Annalog {
 	constructor() {
 		this.alDom = document.getElementsByTagName('al-application')[0];
 		this.models = new Models();
+		this.models.addModel('al_ajax', null, false);
+		this.models.addModel('al_eventElement', null, false);
 		this.tags = new Tags(this);
 		document.body.removeChild(document.getElementsByTagName('al-application')[0]);
 		this.constructDomTree(this.alDom.querySelector('[data-name="al-mainView"]'), document.body);
@@ -226,21 +224,9 @@ class Annalog {
 		Array.from(start.childNodes).forEach(node => {
 			if (node.nodeName.substring(0, 3) == 'AL-')
 				this.tags[node.localName.substring(3)](node);
-			/*{
-				switch (node.localName) {
-					case 'al-model':
-						this.tags["model"](node);
-						break;
-					case 'al-fill':
-						this.tags["fill"](node);
-						break;
-					default:
-						break;
-				}
-			}*/
 			else {
 				let newTarget = target.appendChild(node.cloneNode(false));
-				function handler(node, models) {
+				let handler = (node, models) => {
 					if (node.type == 'checkbox')
 						models.setValue(node.checked, node.dataset.model, node.dataset.number, node.dataset.element);
 					else
@@ -257,7 +243,7 @@ class Annalog {
 							return this.models.getValue(match.substr(1));
 						}));
 					if (newTarget.hasAttribute('data-model')) {
-						if (newTarget.nodeName == 'INPUT') {
+						if ((newTarget.nodeName == 'INPUT') || (newTarget.nodeName == 'SELECT')) {
 							if (!newTarget.hasAttribute('data-number')) newTarget.setAttribute('data-number', 0);
 							if (!newTarget.hasAttribute('data-element')) newTarget.setAttribute('data-element', 0);
 							newTarget.value = this.models.getValue(newTarget.dataset.model,
