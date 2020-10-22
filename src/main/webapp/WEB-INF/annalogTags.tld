@@ -59,6 +59,29 @@
 			<name>responseModel</name>
 		</attribute>
 		<attribute>
+			<name>subjectModel</name>
+		</attribute>
+		<attribute>
+			<name>target</name>
+		</attribute>
+		<attribute>
+			<name>removedReferencesTarget</name>
+		</attribute>
+	</tag>
+	<tag>
+		<name>concondition</name>
+		<tag-class>hu.annalog.tagHandlers.ConditionTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>model</name>
+		</attribute>
+		<attribute>
+			<name>term</name>
+		</attribute>
+		<attribute>
+			<name>value</name>
+		</attribute>
+		<attribute>
 			<name>target</name>
 		</attribute>
 	</tag>
@@ -80,6 +103,14 @@
 		</attribute>
 		<attribute>
 			<name>groupNumberElement</name>
+		</attribute>
+	</tag>
+	<tag>
+		<name>removeElements</name>
+		<tag-class>hu.annalog.tagHandlers.RemoveElementsTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>selector</name>
 		</attribute>
 	</tag>
 	<tag>

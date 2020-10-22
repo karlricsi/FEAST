@@ -12,7 +12,9 @@ public class AjaxTag extends SimpleTagSupport {
 	private String url = "";
 	private String data = "";
 	private String responseModel = "";
+	private String subjectModel = "";
 	private String target = "body";
+	private String removedReferencesTarget = "";
 
 	public void setMethod(String method) {
 		this.method = method;
@@ -30,8 +32,16 @@ public class AjaxTag extends SimpleTagSupport {
 		this.responseModel = responseModel;
 	}
 
+	public void setSubjectModel(String subjectModel) {
+		this.subjectModel = subjectModel;
+	}
+
 	public void setTarget(String target) {
 		this.target = target;
+	}
+
+	public void setRemovedReferencesTarget(String removedReferencesTarget) {
+		this.removedReferencesTarget = removedReferencesTarget;
 	}
 
 	@Override
@@ -39,8 +49,9 @@ public class AjaxTag extends SimpleTagSupport {
 		this.getJspBody().invoke(content);
 		this.getJspContext().getOut()
 				.print("<al-ajax data-method=\"" + method + "\" data-url=\"" + url + "\" data-data=\"" + data
-						+ "\" data-responsemodel=\"" + responseModel + "\" data-target=\"" + target + "\">"
-						+ content.toString() + "</al-ajax>");
+						+ "\" data-responsemodel=\"" + responseModel + "\" data-subjectmodel=\"" + subjectModel
+						+ "\" data-target=\"" + target + "\" data-removedreferencestarget=\"" + removedReferencesTarget
+						+ "\">" + content.toString() + "</al-ajax>");
 	}
 
 }

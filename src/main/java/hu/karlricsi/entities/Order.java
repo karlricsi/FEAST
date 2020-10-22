@@ -12,6 +12,13 @@ public class Order {
 	public Order() {
 	}
 
+	public Order(int user_id) {
+		super();
+		this.user_id = user_id;
+		this.date = new Date(System.currentTimeMillis());
+		this.closed = false;
+	}
+
 	public Order(int orderId, int user_id, Date date, boolean closed) {
 		super();
 		this.orderId = orderId;

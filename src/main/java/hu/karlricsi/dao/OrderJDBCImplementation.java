@@ -35,8 +35,25 @@ public class OrderJDBCImplementation implements OrderDAO<Order> {
 	}
 
 	@Override
-	public int insert(Order data) throws DAOException {
-		throw new UnsupportedOperationException();
+	public int insert(Order order) throws DAOException {
+		try {
+			connection = dataSource.getConnection();
+			PreparedStatement statement = connection
+					.prepareStatement("INSERT INTO `feast`.`orders` (`user_id`,`date`) VALUES (?,?)");
+			statement.setInt(1, order.getUser_id());
+			statement.setDate(2, order.getDate());
+			return statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					throw new DAOException(e);
+				}
+			}
+		}
 	}
 
 	@Override

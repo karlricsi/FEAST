@@ -59,11 +59,37 @@ class Tags {
 			this.annalog.models.getModel('al_ajax').setValue(request);
 			request.send(JSON.stringify(data));
 			request.addEventListener('load', _ => {
-				this.annalog.models.addModel(node.dataset.responsemodel, request.responseText);
+				let response = JSON.parse(request.responseText);
+				if (node.dataset.removedreferencestarget) {
+					let indexes = [];
+					this.annalog.models.getReferences(node.dataset.responsemodel).forEach((reference, i) => {
+						if (reference.matches(node.dataset.removedreferencestarget))
+							indexes.push(i);
+					});
+					indexes.reverse().forEach(index =>
+						this.annalog.models.getModel(node.dataset.responsemodel).removeReference(index)
+					);
+				}
+				this.annalog.models.addModel(node.dataset.responsemodel, JSON.stringify(response.model));
+				this.annalog.models.addModel(node.dataset.subjectmodel, JSON.stringify(response.subject));
 				Array.from(document.querySelectorAll(node.dataset.target)).forEach(selectedNode =>
 					this.annalog.constructDomTree(node, selectedNode)
 				);
 			});
+		}
+
+		this.condition = node => {
+			let condition = false;
+			switch (node.dataset.term) {
+				case 'equal':
+					if (this.annalog.models.getValue(node.dataset.model) == node.dataset.value)
+						condition = true;
+					break;
+			}
+			if (condition)
+				Array.from(document.querySelectorAll(node.dataset.target)).forEach(selectedNode =>
+					this.annalog.constructDomTree(node, selectedNode)
+				);
 		}
 
 		this.fill = node => {
@@ -80,6 +106,12 @@ class Tags {
 				});
 			}
 			this.annalog.models.removeModel(node.dataset.counter);
+		}
+
+		this.removeelements = node => {
+			Array.from(document.querySelectorAll(node.dataset.selector)).forEach(selectedNode =>
+				selectedNode.remove()
+			);
 		}
 
 		this.setclass = node => {

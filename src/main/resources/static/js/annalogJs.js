@@ -24,6 +24,10 @@ class Model {
 		}
 	}
 
+	setValues(value) {
+		this.value = value;
+	}
+
 	getValues() {
 		return this.value;
 	}
@@ -34,6 +38,10 @@ class Model {
 
 	addReference(reference) {
 		this.references.push(reference);
+	}
+
+	removeReference(index) {
+		this.references.splice(index, 1);
 	}
 
 	length() {
@@ -59,7 +67,13 @@ class Models {
 		}
 		else
 			value = '[{"0":' + value + '}]';
-		this.models[name] = new Model(name, JSON.parse(value), synchronized);
+		if (this.models[name] == undefined)
+			this.models[name] = new Model(name, JSON.parse(value), synchronized);
+		else
+			this.models[name].setValues(JSON.parse(value));
+		this.getReferences(name).forEach(reference =>
+			reference.textContent = reference.hasAttribute('data-operation') ? this.interpreter(reference.dataset.operation)[0][0] :
+				this.getValue(reference.dataset.model, reference.dataset.number, reference.dataset.element));
 	}
 
 	removeModel(name) {
@@ -101,11 +115,10 @@ class Models {
 		let executor = (operators, factors, models) => {
 			let definedOperators = ['*', '/', '+', '-'];
 			let index = -1;
-			let i = 0;
-			for (i = 0; i < 4; i++) {
-				index = operators.indexOf(definedOperators[i]);
-				if (index > -1) break;
-			}
+			definedOperators.forEach(operator => {
+				if (index != -1)
+					index = operators.indexOf(operator);
+			});
 			if (index > -1) {
 				switch (definedOperators[i]) {
 					case '*':

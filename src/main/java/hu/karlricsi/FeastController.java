@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import hu.karlricsi.dao.DAO;
 import hu.karlricsi.dao.DAOException;
 import hu.karlricsi.dao.OrderDAO;
+import hu.annalog.entities.AjaxResponse;
 import hu.karlricsi.dao.BasketDAO;
 import hu.karlricsi.entities.*;
 
@@ -33,23 +33,30 @@ public class FeastController {
 	private BasketDAO<BasketItem> basketDAO;
 
 	@RequestMapping(value = "/process/addfood", method = RequestMethod.POST, produces = "application/json")
-	public ModelAndView addFood(@RequestBody String request) {
-		ModelAndView model = new ModelAndView();
-
-		System.out.println("addFood: " + request);
-
-		return model;
+	public @ResponseBody AjaxResponse<List<BasketItem>> addFood(@RequestBody AddOrRemoveFood food) {
+		List<BasketItem> basketItems = new ArrayList<>();
+		try {
+			Order order = orderDAO.findOpenedOrder(food.getUserId());
+			if(order.getOrderId()==0) {
+				orderDAO.insert(new Order(food.getUserId()));
+			}
+			
+			
+			basketItems = basketDAO.findAsOrderId(order.getOrderId());
+		} catch (DAOException e) {
+		}
+		return new AjaxResponse<>(basketItems.isEmpty() ? "Empty" : "OK", basketItems);
 	}
 
 	@PostMapping(value = "/process/userselect", produces = "application/json")
-	public @ResponseBody List<BasketItem> userSelect(@RequestBody UserSelect user) {
+	public @ResponseBody AjaxResponse<List<BasketItem>> userSelect(@RequestBody UserSelect user) {
 		List<BasketItem> basketItems = new ArrayList<>();
 		try {
 			Order order = orderDAO.findOpenedOrder(user.getUserId());
 			basketItems = basketDAO.findAsOrderId(order.getOrderId());
 		} catch (DAOException e) {
 		}
-		return basketItems;
+		return new AjaxResponse<>(basketItems.isEmpty() ? "Empty" : "OK", basketItems);
 	}
 
 	@RequestMapping("/")
@@ -73,7 +80,6 @@ public class FeastController {
 			JSONArray foodsArray = new JSONArray(foods);
 			model.addAttribute("foods", foodsArray.toString());
 			List<OrderItem> basket = new ArrayList<>();
-
 			JSONArray basketArray = new JSONArray(basket);
 			model.addAttribute("basket", basketArray.toString());
 		} catch (DAOException e) {

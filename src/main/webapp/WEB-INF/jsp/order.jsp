@@ -71,14 +71,26 @@
 				<annalog:fill model='categories' counter='counter' view='food-category' target='#menu' />
 				<annalog:fill model='foods' counter='counter' view='food' target='#menu ul' groupNumberElement='category' />
 				<annalog:controller selector='.addbutton' event='click'>
-					<annalog:ajax url='process/addfood' data='userId:%model.user,foodId:%model.al_eventElement[value]' responseModel=''>
+					<annalog:ajax url='process/addfood' data='userId:%model.user,foodId:%model.al_eventElement[value]' responseModel='basket' subjectModel='message'
+						removedReferencesTarget='.basketRef'>
+						<annalog:removeElements selector='.basketItem' />
+						<annalog:concondition model='message' value='OK'>
+							<annalog:fill model='basket' counter='counter' view='basketitem' target='#basket' />
+							<annalog:setclass selector='#closebutton' className='disabled' doIt='remove' />
+						</annalog:concondition>
 					</annalog:ajax>
 				</annalog:controller>
 				<annalog:controller selector='#userselect' event='change'>
 					<annalog:setclass selector='.addbutton button' className='disabled' doIt='remove' />
-					<annalog:ajax url='process/userselect' data='userId:%model.user' responseModel='basket'>
-						<annalog:fill model='basket' counter='counter' view='basketitem' target='#basket' />
-						<annalog:setclass selector='#closebutton' className='disabled' doIt='remove' />
+					<annalog:ajax url='process/userselect' data='userId:%model.user' responseModel='basket' subjectModel='message' removedReferencesTarget='.basketRef'>
+						<annalog:removeElements selector='.basketItem' />
+						<annalog:concondition model='message' value='OK'>
+							<annalog:fill model='basket' counter='counter' view='basketitem' target='#basket' />
+							<annalog:setclass selector='#closebutton' className='disabled' doIt='remove' />
+						</annalog:concondition>
+						<annalog:concondition model='message' value='Empty'>
+							<annalog:setclass selector='#closebutton' className='disabled' doIt='add' />
+						</annalog:concondition>
 					</annalog:ajax>
 				</annalog:controller>
 			</annalog:view>
@@ -99,10 +111,10 @@
 				</li>
 			</annalog:view>
 			<annalog:view name='basketitem'>
-				<div>
-					<div data-model='basket' data-number='%model.counter' data-element='foodName'></div>
-					<div class='inlineblock'><span data-model='basket' data-number='%model.counter' data-element='quantity'></span>db </div>
-					<div class='inlineblock'><span data-model='basket' data-number='%model.counter' data-element='price'></span>Ft</div>
+				<div class='basketItem'>
+					<div class='basketRef' data-model='basket' data-number='%model.counter' data-element='foodName'></div>
+					<div class='inlineblock'><span class='basketRef' data-model='basket' data-number='%model.counter' data-element='quantity'></span>db </div>
+					<div class='inlineblock'><span class='basketRef' data-model='basket' data-number='%model.counter' data-element='price'></span>Ft</div>
 					<div class='inlineblock'>
 						<button name='foodId' value='%model' data-attributemodel='foods' data-number='%model.counter' data-element='foodId'>Töröl</button>
 					</div>
