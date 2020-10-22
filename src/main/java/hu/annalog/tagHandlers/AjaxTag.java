@@ -11,6 +11,8 @@ public class AjaxTag extends SimpleTagSupport {
 	private String method = "POST";
 	private String url = "";
 	private String data = "";
+	private String responseModel = "";
+	private String target = "body";
 
 	public void setMethod(String method) {
 		this.method = method;
@@ -24,11 +26,21 @@ public class AjaxTag extends SimpleTagSupport {
 		this.data = data;
 	}
 
+	public void setResponseModel(String responseModel) {
+		this.responseModel = responseModel;
+	}
+
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
 	@Override
 	public void doTag() throws JspException, IOException {
 		this.getJspBody().invoke(content);
-		this.getJspContext().getOut().print("<al-ajax data-method=\"" + method + "\" data-url=\"" + url
-				+ "\" data-data=\"" + data + "\">" + content.toString() + "</al-ajax>");
+		this.getJspContext().getOut()
+				.print("<al-ajax data-method=\"" + method + "\" data-url=\"" + url + "\" data-data=\"" + data
+						+ "\" data-responsemodel=\"" + responseModel + "\" data-target=\"" + target + "\">"
+						+ content.toString() + "</al-ajax>");
 	}
 
 }

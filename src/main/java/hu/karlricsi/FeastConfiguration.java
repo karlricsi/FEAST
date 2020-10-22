@@ -24,6 +24,16 @@ public class FeastConfiguration {
 	}
 
 	@Bean
+	public OrderJDBCImplementation getOrdersDAO() {
+		return new OrderJDBCImplementation();
+	}
+
+	@Bean
+	public BasketJDBCImplementation getOrderItemsDAO() {
+		return new BasketJDBCImplementation();
+	}
+
+	@Bean
 	public MysqlDataSource getDataSource() {
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setURL(

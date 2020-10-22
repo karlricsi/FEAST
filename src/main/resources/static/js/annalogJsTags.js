@@ -54,20 +54,15 @@ class Tags {
 			});
 			let request = new XMLHttpRequest();
 			request.open(node.dataset.method, node.dataset.url, true);
+			request.setRequestHeader('Accept', 'application/json');
+			request.setRequestHeader('Content-Type', 'application/json');
 			this.annalog.models.getModel('al_ajax').setValue(request);
 			request.send(JSON.stringify(data));
-		}
-
-		this.setclass = node => {
-			document.querySelectorAll(node.dataset.selector).forEach(selectedNode => {
-				switch (node.dataset.doit) {
-					case 'add':
-						selectedNode.classList.add(node.dataset.classname);
-						break;
-					case 'remove':
-						selectedNode.classList.remove(node.dataset.classname);
-						break;
-				}
+			request.addEventListener('load', _ => {
+				this.annalog.models.addModel(node.dataset.responsemodel, request.responseText);
+				Array.from(document.querySelectorAll(node.dataset.target)).forEach(selectedNode =>
+					this.annalog.constructDomTree(node, selectedNode)
+				);
 			});
 		}
 
@@ -85,6 +80,19 @@ class Tags {
 				});
 			}
 			this.annalog.models.removeModel(node.dataset.counter);
+		}
+
+		this.setclass = node => {
+			document.querySelectorAll(node.dataset.selector).forEach(selectedNode => {
+				switch (node.dataset.doit) {
+					case 'add':
+						selectedNode.classList.add(node.dataset.classname);
+						break;
+					case 'remove':
+						selectedNode.classList.remove(node.dataset.classname);
+						break;
+				}
+			});
 		}
 
 	}

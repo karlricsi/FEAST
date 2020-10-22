@@ -236,8 +236,8 @@ class Annalog {
 							models.getValue(reference.dataset.model, reference.dataset.number, reference.dataset.element))
 				}
 				if (newTarget.nodeType == 1) {
-					if (newTarget.hasAttribute('data-number') && isNaN(newTarget.dataset.number))
-						newTarget.setAttribute('data-number', this.models.getValue(newTarget.dataset.number));
+					if (newTarget.hasAttribute('data-number') && newTarget.dataset.number.includes('%model.'))
+						newTarget.setAttribute('data-number', this.models.getValue(newTarget.dataset.number.replace('%model.', '')));
 					if (newTarget.hasAttribute('data-operation'))
 						newTarget.setAttribute('data-operation', newTarget.dataset.operation.replace(/%([A-Za-z0-9_-])+/g, match => {
 							return this.models.getValue(match.substr(1));

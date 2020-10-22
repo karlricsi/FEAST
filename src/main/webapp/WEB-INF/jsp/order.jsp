@@ -67,39 +67,46 @@
 						<div id='basket'></div>
 					</fieldset>
 				</div>
-				<annalog:fill model='users' counter='counter' view='user' target='[id=userselect]' />
-				<annalog:fill model='categories' counter='counter' view='food-category' target='[id=menu]' />
-				<annalog:fill model='foods' counter='counter' view='food' target='[id=menu] ul' groupNumberElement='category'/>
-				<annalog:fill model='basket' counter='counter' view='basketitem' target='[id=basket]' />
+				<annalog:fill model='users' counter='counter' view='user' target='#userselect' />
+				<annalog:fill model='categories' counter='counter' view='food-category' target='#menu' />
+				<annalog:fill model='foods' counter='counter' view='food' target='#menu ul' groupNumberElement='category' />
 				<annalog:controller selector='.addbutton' event='click'>
-					<annalog:setclass selector='#closebutton' className='disabled' doIt='remove' />
-					<annalog:ajax url='process/addfood' data='userId:%model.user,foodId:%model.al_eventElement[value]'>
+					<annalog:ajax url='process/addfood' data='userId:%model.user,foodId:%model.al_eventElement[value]' responseModel=''>
 					</annalog:ajax>
 				</annalog:controller>
 				<annalog:controller selector='#userselect' event='change'>
 					<annalog:setclass selector='.addbutton button' className='disabled' doIt='remove' />
-					<annalog:ajax url='process/userselect' data='userId:%model.user'>
+					<annalog:ajax url='process/userselect' data='userId:%model.user' responseModel='basket'>
+						<annalog:fill model='basket' counter='counter' view='basketitem' target='#basket' />
+						<annalog:setclass selector='#closebutton' className='disabled' doIt='remove' />
 					</annalog:ajax>
 				</annalog:controller>
 			</annalog:view>
 			<annalog:view name='user'>
-				<option value='%model' data-attributemodel='users' data-number='counter' data-element='id' data-textelement='name'></option>
+				<option value='%model' data-attributemodel='users' data-number='%model.counter' data-element='id' data-textelement='name'></option>
 			</annalog:view>
 			<annalog:view name='food-category'>
-				<span data-model='categories' data-number='counter' data-element='name'></span>
-				<ul id='category-%model' data-attributemodel='categories' data-number='counter' data-element='id'></ul>
+				<span data-model='categories' data-number='%model.counter' data-element='name'></span>
+				<ul id='category-%model' data-attributemodel='categories' data-number='%model.counter' data-element='id'></ul>
 			</annalog:view>
 			<annalog:view name='food'>
 				<li>
-					<div data-model='foods' data-number='counter' data-element='name'></div>
-					<div class='inlineblock'><span data-model='foods' data-number='counter' data-element='price'></span>Ft</div>
+					<div data-model='foods' data-number='%model.counter' data-element='name'></div>
+					<div class='inlineblock'><span data-model='foods' data-number='%model.counter' data-element='price'></span>Ft</div>
 					<div class='inlineblock addbutton'>
-						<button class='disabled' name='foodId' value='%model' data-attributemodel='foods' data-number='counter' data-element='id'>Hozzáad</button>
+						<button class='disabled' name='foodId' value='%model' data-attributemodel='foods' data-number='%model.counter' data-element='id'>Hozzáad</button>
 					</div>
 				</li>
 			</annalog:view>
 			<annalog:view name='basketitem'>
-				<div></div>
+				<div>
+					<div data-model='basket' data-number='%model.counter' data-element='foodName'></div>
+					<div class='inlineblock'><span data-model='basket' data-number='%model.counter' data-element='quantity'></span>db </div>
+					<div class='inlineblock'><span data-model='basket' data-number='%model.counter' data-element='price'></span>Ft</div>
+					<div class='inlineblock'>
+						<button name='foodId' value='%model' data-attributemodel='foods' data-number='%model.counter' data-element='foodId'>Töröl</button>
+					</div>
+				</div>
 			</annalog:view>
 		</annalog:application>
 	</body>

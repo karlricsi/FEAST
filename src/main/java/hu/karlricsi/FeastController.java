@@ -6,12 +6,16 @@ import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import hu.karlricsi.dao.DAO;
 import hu.karlricsi.dao.DAOException;
+import hu.karlricsi.dao.OrderDAO;
+import hu.karlricsi.dao.BasketDAO;
 import hu.karlricsi.entities.*;
 
 @Controller
@@ -23,8 +27,12 @@ public class FeastController {
 	private DAO<MenuCategory> categoriesDAO;
 	@Autowired
 	private DAO<MenuElement> foodsDAO;
+	@Autowired
+	private OrderDAO<Order> orderDAO;
+	@Autowired
+	private BasketDAO<BasketItem> basketDAO;
 
-	@RequestMapping(value = "/process/addfood", method = RequestMethod.POST)
+	@RequestMapping(value = "/process/addfood", method = RequestMethod.POST, produces = "application/json")
 	public ModelAndView addFood(@RequestBody String request) {
 		ModelAndView model = new ModelAndView();
 
@@ -33,13 +41,15 @@ public class FeastController {
 		return model;
 	}
 
-	@RequestMapping(value = "/process/userselect", method = RequestMethod.POST)
-	public ModelAndView userSelect(@RequestBody String request) {
-		ModelAndView model = new ModelAndView();
-
-		System.out.println("userSelect: " + request);
-
-		return model;
+	@PostMapping(value = "/process/userselect", produces = "application/json")
+	public @ResponseBody List<BasketItem> userSelect(@RequestBody UserSelect user) {
+		List<BasketItem> basketItems = new ArrayList<>();
+		try {
+			Order order = orderDAO.findOpenedOrder(user.getUserId());
+			basketItems = basketDAO.findAsOrderId(order.getOrderId());
+		} catch (DAOException e) {
+		}
+		return basketItems;
 	}
 
 	@RequestMapping("/")
@@ -62,12 +72,11 @@ public class FeastController {
 			foods = foodsDAO.findAll();
 			JSONArray foodsArray = new JSONArray(foods);
 			model.addAttribute("foods", foodsArray.toString());
-			List<BasketItem> basket = new ArrayList<>();
+			List<OrderItem> basket = new ArrayList<>();
 
 			JSONArray basketArray = new JSONArray(basket);
 			model.addAttribute("basket", basketArray.toString());
 		} catch (DAOException e) {
-			return "errorPage";
 		}
 		return "order";
 	}

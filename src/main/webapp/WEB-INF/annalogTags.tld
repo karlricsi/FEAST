@@ -55,6 +55,12 @@
 		<attribute>
 			<name>data</name>
 		</attribute>
+		<attribute>
+			<name>responseModel</name>
+		</attribute>
+		<attribute>
+			<name>target</name>
+		</attribute>
 	</tag>
 	<tag>
 		<name>fill</name>

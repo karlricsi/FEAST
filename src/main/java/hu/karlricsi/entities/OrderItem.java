@@ -1,34 +1,34 @@
 package hu.karlricsi.entities;
 
-public class BasketItem {
+public class OrderItem {
 
+	private int orderId;
 	private int foodId;
-	private String foodName;
 	private double price;
 	private int quantity;
 
-	public BasketItem(int foodId, String foodName, double price, int quantity) {
+	public OrderItem(int orderId, int foodId, double price, int quantity) {
 		super();
+		this.orderId = orderId;
 		this.foodId = foodId;
-		this.foodName = foodName;
 		this.price = price;
 		this.quantity = quantity;
+	}
+
+	public int getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
 
 	public int getFoodId() {
 		return foodId;
 	}
 
-	public void setFoodId(int foodId) {
-		this.foodId = foodId;
-	}
-
-	public String getFoodName() {
-		return foodName;
-	}
-
-	public void setFoodName(String foodName) {
-		this.foodName = foodName;
+	public void setFoodId(int id) {
+		this.foodId = id;
 	}
 
 	public double getPrice() {
