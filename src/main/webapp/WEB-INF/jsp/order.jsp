@@ -70,7 +70,7 @@
 				<annalog:fill model='users' counter='counter' view='user' target='#userselect' />
 				<annalog:fill model='categories' counter='counter' view='food-category' target='#menu' />
 				<annalog:fill model='foods' counter='counter' view='food' target='#menu ul' groupNumberElement='category' />
-				<annalog:controller selector='.addbutton' event='click'>
+				<annalog:controller selector='.addbutton button' event='click'>
 					<annalog:ajax url='process/addfood' data='userId:%model.user,foodId:%model.al_eventElement[value]' responseModel='basket' subjectModel='message'
 						removedReferencesTarget='.basketRef'>
 						<annalog:removeElements selector='.basketItem' />
@@ -115,10 +115,19 @@
 					<div class='basketRef' data-model='basket' data-number='%model.counter' data-element='foodName'></div>
 					<div class='inlineblock'><span class='basketRef' data-model='basket' data-number='%model.counter' data-element='quantity'></span>db </div>
 					<div class='inlineblock'><span class='basketRef' data-model='basket' data-number='%model.counter' data-element='price'></span>Ft</div>
-					<div class='inlineblock'>
-						<button name='foodId' value='%model' data-attributemodel='foods' data-number='%model.counter' data-element='foodId'>Töröl</button>
+					<div class='inlineblock removebutton'>
+						<button name='foodId' value='%model' data-attributemodel='basket' data-number='%model.counter' data-element='foodId'>Töröl</button>
 					</div>
 				</div>
+				<annalog:controller selector='.removebutton button' event='click' removePreviousEvent='true'>
+					<annalog:ajax url='process/removefood' data='userId:%model.user,foodId:%model.al_eventElement[value]' responseModel='basket' subjectModel='message'
+						removedReferencesTarget='.basketRef'>
+						<annalog:removeElements selector='.basketItem' />
+						<annalog:concondition model='message' value='OK'>
+							<annalog:fill model='basket' counter='counter' view='basketitem' target='#basket' />
+						</annalog:concondition>
+					</annalog:ajax>
+				</annalog:controller>
 			</annalog:view>
 		</annalog:application>
 	</body>

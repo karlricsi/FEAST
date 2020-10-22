@@ -7,6 +7,12 @@ public class OrderItem {
 	private double price;
 	private int quantity;
 
+	public OrderItem(int orderId, int foodId) {
+		super();
+		this.orderId = orderId;
+		this.foodId = foodId;
+	}
+
 	public OrderItem(int orderId, int foodId, double price, int quantity) {
 		super();
 		this.orderId = orderId;

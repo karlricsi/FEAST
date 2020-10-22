@@ -1,13 +1,17 @@
 package hu.karlricsi.entities;
 
-public class MenuElement {
+public class Food {
 
 	private int id;
 	private int categoryId;
 	private String name;
 	private double price;
 
-	public MenuElement(int id, int categoryId, String name, double price) {
+	public Food() {
+		super();
+	}
+
+	public Food(int id, int categoryId, String name, double price) {
 		super();
 		this.id = id;
 		this.categoryId = categoryId;

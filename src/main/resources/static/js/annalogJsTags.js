@@ -14,7 +14,12 @@ class Tags {
 		}
 
 		this.controller = node => {
-			document.querySelectorAll(node.dataset.selector).forEach(element =>
+			document.querySelectorAll(node.dataset.selector).forEach(element => {
+				if (node.hasAttribute('data-removepreviousevent')) {
+					let cloneNode = element.cloneNode(true);
+					element.parentNode.replaceChild(cloneNode, element);
+					element = cloneNode;
+				}
 				element.addEventListener(node.dataset.event, event => {
 					let eventKeys = {};
 					for (let key in event.target)
@@ -25,7 +30,7 @@ class Tags {
 						this.annalog.constructDomTree(node, selectedNode)
 					);
 				})
-			);
+			});
 		}
 
 		this.ajax = node => {

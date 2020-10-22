@@ -11,6 +11,7 @@ public class ControllerTag extends SimpleTagSupport {
 	private String selector = "body";
 	private String event = "";
 	private String target = "body";
+	private boolean removePreviousEvent = false;
 
 	public void setSelector(String selector) {
 		this.selector = selector;
@@ -24,11 +25,17 @@ public class ControllerTag extends SimpleTagSupport {
 		this.target = target;
 	}
 
+	public void setRemovePreviousEvent(boolean removePreviousEvent) {
+		this.removePreviousEvent = removePreviousEvent;
+	}
+
 	@Override
 	public void doTag() throws JspException, IOException {
 		this.getJspBody().invoke(content);
-		this.getJspContext().getOut().print("<al-controller data-selector=\"" + selector + "\" data-event=\"" + event
-				+ "\" data-target=\"" + target + "\">" + content.toString() + "</al-controller>");
+		this.getJspContext().getOut()
+				.print("<al-controller data-selector=\"" + selector + "\" data-event=\"" + event + "\" data-target=\""
+						+ target + "\"" + (removePreviousEvent ? " data-removepreviousevent" : "") + ">"
+						+ content.toString() + "</al-controller>");
 	}
 
 }

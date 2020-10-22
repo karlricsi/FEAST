@@ -14,13 +14,13 @@ public class FeastConfiguration {
 	}
 
 	@Bean
-	public MenuCategoryJDBCImplementation getCategoriesDAO() {
-		return new MenuCategoryJDBCImplementation();
+	public CategoryJDBCImplementation getCategoriesDAO() {
+		return new CategoryJDBCImplementation();
 	}
 
 	@Bean
-	public MenuElementJDBCImplementation getFoodsDAO() {
-		return new MenuElementJDBCImplementation();
+	public FoodJDBCImplementation getFoodsDAO() {
+		return new FoodJDBCImplementation();
 	}
 
 	@Bean
@@ -29,7 +29,12 @@ public class FeastConfiguration {
 	}
 
 	@Bean
-	public BasketJDBCImplementation getOrderItemsDAO() {
+	public OrderItemJDBCImplementation getOrderItemsDAO() {
+		return new OrderItemJDBCImplementation();
+	}
+
+	@Bean
+	public BasketJDBCImplementation getBasketDAO() {
 		return new BasketJDBCImplementation();
 	}
 

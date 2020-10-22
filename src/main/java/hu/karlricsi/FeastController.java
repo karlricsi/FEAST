@@ -9,7 +9,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import hu.karlricsi.dao.DAO;
 import hu.karlricsi.dao.DAOException;
@@ -24,24 +23,35 @@ public class FeastController {
 	@Autowired
 	private DAO<User> usersDAO;
 	@Autowired
-	private DAO<MenuCategory> categoriesDAO;
+	private DAO<Category> categoriesDAO;
 	@Autowired
-	private DAO<MenuElement> foodsDAO;
+	private DAO<Food> foodsDAO;
 	@Autowired
-	private OrderDAO<Order> orderDAO;
+	private OrderDAO<Order> ordersDAO;
 	@Autowired
 	private BasketDAO<BasketItem> basketDAO;
 
-	@RequestMapping(value = "/process/addfood", method = RequestMethod.POST, produces = "application/json")
+	@PostMapping(value = "/process/addfood", produces = "application/json")
 	public @ResponseBody AjaxResponse<List<BasketItem>> addFood(@RequestBody AddOrRemoveFood food) {
 		List<BasketItem> basketItems = new ArrayList<>();
 		try {
-			Order order = orderDAO.findOpenedOrder(food.getUserId());
-			if(order.getOrderId()==0) {
-				orderDAO.insert(new Order(food.getUserId()));
+			Order order = ordersDAO.findOpenedOrder(food.getUserId());
+			if (order.getOrderId() == 0) {
+				ordersDAO.insert(new Order(food.getUserId()));
 			}
-			
-			
+			basketDAO.udateBasketItem(food, order.getOrderId(), foodsDAO.find(food.getFoodId()).getPrice(), false);
+			basketItems = basketDAO.findAsOrderId(order.getOrderId());
+		} catch (DAOException e) {
+		}
+		return new AjaxResponse<>(basketItems.isEmpty() ? "Empty" : "OK", basketItems);
+	}
+
+	@PostMapping(value = "/process/removefood", produces = "application/json")
+	public @ResponseBody AjaxResponse<List<BasketItem>> removeFood(@RequestBody AddOrRemoveFood food) {
+		List<BasketItem> basketItems = new ArrayList<>();
+		try {
+			Order order = ordersDAO.findOpenedOrder(food.getUserId());
+			basketDAO.udateBasketItem(food, order.getOrderId(), foodsDAO.find(food.getFoodId()).getPrice(), true);
 			basketItems = basketDAO.findAsOrderId(order.getOrderId());
 		} catch (DAOException e) {
 		}
@@ -52,7 +62,7 @@ public class FeastController {
 	public @ResponseBody AjaxResponse<List<BasketItem>> userSelect(@RequestBody UserSelect user) {
 		List<BasketItem> basketItems = new ArrayList<>();
 		try {
-			Order order = orderDAO.findOpenedOrder(user.getUserId());
+			Order order = ordersDAO.findOpenedOrder(user.getUserId());
 			basketItems = basketDAO.findAsOrderId(order.getOrderId());
 		} catch (DAOException e) {
 		}
@@ -71,11 +81,11 @@ public class FeastController {
 			users = usersDAO.findAll();
 			JSONArray usersArray = new JSONArray(users);
 			model.addAttribute("users", usersArray.toString());
-			List<MenuCategory> categories;
+			List<Category> categories;
 			categories = categoriesDAO.findAll();
 			JSONArray categoriesArray = new JSONArray(categories);
 			model.addAttribute("categories", categoriesArray.toString());
-			List<MenuElement> foods;
+			List<Food> foods;
 			foods = foodsDAO.findAll();
 			JSONArray foodsArray = new JSONArray(foods);
 			model.addAttribute("foods", foodsArray.toString());
