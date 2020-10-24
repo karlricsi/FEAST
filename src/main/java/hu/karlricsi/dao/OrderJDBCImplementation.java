@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import hu.karlricsi.entities.Month;
 import hu.karlricsi.entities.Order;
+import hu.karlricsi.entities.Year;
 
 public class OrderJDBCImplementation implements OrderDAO<Order> {
 
@@ -135,6 +138,57 @@ public class OrderJDBCImplementation implements OrderDAO<Order> {
 						result.getBoolean("closed"));
 			}
 			return new Order();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					throw new DAOException(e);
+				}
+			}
+		}
+	}
+
+	@Override
+	public List<Year> findYearsContainOrders() throws DAOException {
+		try {
+			connection = dataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(
+					"SELECT YEAR(`date`) as `year` FROM `feast`.`orders` GROUP BY `year` ORDER BY `year`");
+			ResultSet result = statement.executeQuery();
+			List<Year> years = new ArrayList<>();
+			while (result.next()) {
+				years.add(new Year(result.getInt("year")));
+			}
+			return years;
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					throw new DAOException(e);
+				}
+			}
+		}
+	}
+
+	@Override
+	public List<Month> findMonthsContainOrders(Year year) throws DAOException {
+		try {
+			connection = dataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(
+					"SELECT MONTH(`date`) as `month` FROM `feast`.`orders` WHERE YEAR(`date`)=? GROUP BY `month` ORDER BY `month`");
+			statement.setInt(1, year.getYear());
+			ResultSet result = statement.executeQuery();
+			List<Month> months = new ArrayList<>();
+			while (result.next()) {
+				months.add(new Month(result.getInt("month")));
+			}
+			return months;
 		} catch (SQLException e) {
 			throw new DAOException(e);
 		} finally {

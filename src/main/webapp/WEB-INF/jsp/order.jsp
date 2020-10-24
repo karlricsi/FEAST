@@ -41,7 +41,7 @@
 						<legend>Oldalak</legend>
 						<ul>
 							<li><a href='/'>Főoldal</a></li>
-							<li><a href='/workerconsumptionreport'>Dolgozói fogyasztás riport</a></li>
+							<li><a href='/workerconsumptionreport'>Dolgozó fogyasztás riport</a></li>
 							<li><a href='/productconsumptionreport'>Termék fogyás riport</a></li>
 						</ul>
 					</fieldset>

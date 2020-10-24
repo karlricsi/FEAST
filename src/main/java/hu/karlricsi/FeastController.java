@@ -93,6 +93,16 @@ public class FeastController {
 		return new AjaxResponse<>(basketItems.isEmpty() ? "Empty" : "OK", basketItems);
 	}
 
+	@PostMapping(value = "/process/yearselect", produces = "application/json")
+	public @ResponseBody AjaxResponse<List<Month>> yearSelect(@RequestBody Year year) {
+		List<Month> months = new ArrayList<>();
+		try {
+			months = ordersDAO.findMonthsContainOrders(year);
+		} catch (DAOException e) {
+		}
+		return new AjaxResponse<>(months.isEmpty() ? "Empty" : "OK", months);
+	}
+
 	@RequestMapping("/")
 	public String menu(ModelMap model) {
 		return "menu";
@@ -119,6 +129,22 @@ public class FeastController {
 		} catch (DAOException e) {
 		}
 		return "order";
+	}
+
+	@RequestMapping("/workerconsumptionreport")
+	public String workerConsumptionReport(ModelMap model) {
+		try {
+			List<User> users;
+			users = usersDAO.findAll();
+			JSONArray usersArray = new JSONArray(users);
+			model.addAttribute("users", usersArray.toString());
+			List<Year> years;
+			years = ordersDAO.findYearsContainOrders();
+			JSONArray yearsArray = new JSONArray(years);
+			model.addAttribute("years", yearsArray.toString());
+		} catch (DAOException e) {
+		}
+		return "workerConsumptionReport";
 	}
 
 }

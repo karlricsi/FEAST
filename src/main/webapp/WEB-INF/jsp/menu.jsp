@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="annalog" uri="/WEB-INF/annalogTags.tld"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><%@ taglib prefix="annalog" uri="/WEB-INF/annalogTags.tld"%><!DOCTYPE html>
 <html lang='hu'>
 	<head>
 	<meta charset="UTF-8">
@@ -19,7 +17,7 @@
 						<legend>Oldalak</legend>
 						<ul>
 							<li><a href='/order'>Fogyasztás rögzítés</a></li>
-							<li><a href='/workerconsumptionreport'>Dolgozói fogyasztás riport</a></li>
+							<li><a href='/workerconsumptionreport'>Dolgozó fogyasztás riport</a></li>
 							<li><a href='/productconsumptionreport'>Termék fogyás riport</a></li>
 						</ul>
 					</fieldset>

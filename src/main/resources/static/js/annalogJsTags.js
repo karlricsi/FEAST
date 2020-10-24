@@ -90,6 +90,10 @@ class Tags {
 					if (this.annalog.models.getValue(node.dataset.model) == node.dataset.value)
 						condition = true;
 					break;
+				case 'notequal':
+					if (this.annalog.models.getValue(node.dataset.model) != node.dataset.value)
+						condition = true;
+					break;
 			}
 			if (condition)
 				Array.from(document.querySelectorAll(node.dataset.target)).forEach(selectedNode =>
