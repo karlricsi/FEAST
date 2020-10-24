@@ -11,15 +11,19 @@
 	<body>
 		<annalog:application>
 			<annalog:view>
-				<h1>Tesztfeladat - FEAST - Factory Eating Administration SysTem</h1>
-				<fieldset>
-					<legend>Menü</legend>
-					<ul>
-						<li><a href='order'>Fogyasztás rögzítés</a></li>
-						<li><a href=''>Dolgozói fogyasztás riport</a></li>
-						<li><a href=''>Termék fogyás riport</a></li>
-					</ul>
-				</fieldset>
+				<header>
+					<h1>Tesztfeladat - FEAST - Factory Eating Administration SysTem</h1>
+				</header>
+				<nav>
+					<fieldset>
+						<legend>Oldalak</legend>
+						<ul>
+							<li><a href='/order'>Fogyasztás rögzítés</a></li>
+							<li><a href='/workerconsumptionreport'>Dolgozói fogyasztás riport</a></li>
+							<li><a href='/productconsumptionreport'>Termék fogyás riport</a></li>
+						</ul>
+					</fieldset>
+				</nav>
 			</annalog:view>
 		</annalog:application>
 	</body>

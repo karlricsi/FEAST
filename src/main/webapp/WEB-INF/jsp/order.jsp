@@ -33,41 +33,55 @@
 				<annalog:model name='categories' type='array'>${categories}</annalog:model>
 				<annalog:model name='foods' type='array'>${foods}</annalog:model>
 				<annalog:model name='basket' type='array'>${basket}</annalog:model>
-				<h1>Tesztfeladat - FEAST - Factory Eating Administration SysTem</h1>
-				<div class='inlineblock' id='menudiv'><fieldset>
-					<legend>Étlap</legend>
-					<ul id='menu'>
-					</ul>
-				</fieldset></div>
-				<div class='inlineblock' id='basketdiv'>
-					<label for='userselect'>Dolgozó: </label>
-					<select id='userselect' data-model='user'>
-						<option disabled selected value='0'>- Válassz -</option>
-					</select>
-					<div>
-						<div class='inlineblock'>
-							<div>
-								Tételek száma: 
-								<span data-model='basket' data-operation='SUM(basket,quantity)'></span>
-							</div>
-							<div>
-								Összesen: 
-								<span data-model='basket' data-operation='SUMPRODUCT(basket,price,quantity)'></span>
-								Ft
-							</div>
-						</div>
-						<div class='inlineblock'>
-							<button id='closebutton' class='disabled'>Rendelést lezár</button>
-						</div>
-						<div class='inlineblock'>
-							<button id='removebutton' class='disabled'>Rendelést töröl</button>
-						</div>
-					</div>
+				<header>
+					<h1>Tesztfeladat - FEAST - Factory Eating Administration SysTem</h1>
+				</header>
+				<nav>
 					<fieldset>
-						<legend>Kosár</legend>
-						<div id='basket'></div>
+						<legend>Oldalak</legend>
+						<ul>
+							<li><a href='/'>Főoldal</a></li>
+							<li><a href='/workerconsumptionreport'>Dolgozói fogyasztás riport</a></li>
+							<li><a href='/productconsumptionreport'>Termék fogyás riport</a></li>
+						</ul>
 					</fieldset>
-				</div>
+				</nav>
+				<main>
+					<div class='inlineblock' id='menudiv'><fieldset>
+						<legend>Étlap</legend>
+						<ul id='menu'>
+						</ul>
+					</fieldset></div>
+					<div class='inlineblock' id='basketdiv'>
+						<label for='userselect'>Dolgozó: </label>
+						<select id='userselect' data-model='user'>
+							<option disabled selected value='0'>- Válassz -</option>
+						</select>
+						<div>
+							<div class='inlineblock'>
+								<div>
+									Tételek száma: 
+									<span data-model='basket' data-operation='SUM(basket,quantity)'></span>
+								</div>
+								<div>
+									Összesen: 
+									<span data-model='basket' data-operation='SUMPRODUCT(basket,price,quantity)'></span>
+									Ft
+								</div>
+							</div>
+							<div class='inlineblock'>
+								<button id='closebutton' class='disabled'>Rendelést lezár</button>
+							</div>
+							<div class='inlineblock'>
+								<button id='removebutton' class='disabled'>Rendelést töröl</button>
+							</div>
+						</div>
+						<fieldset>
+							<legend>Kosár</legend>
+							<div id='basket'></div>
+						</fieldset>
+					</div>
+				</main>
 				<annalog:fill model='users' counter='counter' view='user' target='#userselect' />
 				<annalog:fill model='categories' counter='counter' view='food-category' target='#menu' />
 				<annalog:fill model='foods' counter='counter' view='food' target='#menu ul' groupNumberElement='category' />
