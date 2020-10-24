@@ -38,6 +38,7 @@ public class FeastController {
 			Order order = ordersDAO.findOpenedOrder(food.getUserId());
 			if (order.getOrderId() == 0) {
 				ordersDAO.insert(new Order(food.getUserId()));
+				order = ordersDAO.findOpenedOrder(food.getUserId());
 			}
 			basketDAO.udateBasketItem(food, order.getOrderId(), foodsDAO.find(food.getFoodId()).getPrice(), false);
 			basketItems = basketDAO.findAsOrderId(order.getOrderId());
@@ -56,6 +57,29 @@ public class FeastController {
 		} catch (DAOException e) {
 		}
 		return new AjaxResponse<>(basketItems.isEmpty() ? "Empty" : "OK", basketItems);
+	}
+
+	@PostMapping(value = "/process/closeorder", produces = "application/json")
+	public @ResponseBody AjaxResponse<String> closeOrder(@RequestBody UserSelect user) {
+		int result = 0;
+		try {
+			Order order = ordersDAO.findOpenedOrder(user.getUserId());
+			order.setClosed(true);
+			result = ordersDAO.update(order);
+		} catch (DAOException e) {
+		}
+		return new AjaxResponse<>(result == 0 ? "Error" : "OK", "[]");
+	}
+
+	@PostMapping(value = "/process/removeorder", produces = "application/json")
+	public @ResponseBody AjaxResponse<String> removeOrder(@RequestBody UserSelect user) {
+		int result = 0;
+		try {
+			Order order = ordersDAO.findOpenedOrder(user.getUserId());
+			result = ordersDAO.delete(order);
+		} catch (DAOException e) {
+		}
+		return new AjaxResponse<>(result == 0 ? "Error" : "OK", "[]");
 	}
 
 	@PostMapping(value = "/process/userselect", produces = "application/json")

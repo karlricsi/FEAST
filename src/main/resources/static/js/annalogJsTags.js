@@ -119,6 +119,12 @@ class Tags {
 			);
 		}
 
+		this.setattribute = node => {
+			document.querySelectorAll(node.dataset.selector).forEach(selectedNode =>
+				selectedNode[node.dataset.attribute] = node.dataset.value
+			);
+		}
+
 		this.setclass = node => {
 			document.querySelectorAll(node.dataset.selector).forEach(selectedNode => {
 				switch (node.dataset.doit) {

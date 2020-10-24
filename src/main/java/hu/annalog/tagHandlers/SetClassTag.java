@@ -24,8 +24,8 @@ public class SetClassTag extends SimpleTagSupport {
 
 	@Override
 	public void doTag() throws JspException, IOException {
-		this.getJspContext().getOut().print("<al-setclass data-selector=\"" + selector + "\" data-classname=\"" + className
-				+ "\" data-doit=\"" + doIt + "\"></al-setclass>");
+		this.getJspContext().getOut().print("<al-setclass data-selector=\""
+				+ selector + "\" data-classname=\"" + className + "\" data-doit=\"" + doIt + "\"></al-setclass>");
 	}
 
 }

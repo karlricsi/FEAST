@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="annalog" uri="/WEB-INF/annalogTags.tld"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><%@ taglib prefix="annalog" uri="/WEB-INF/annalogTags.tld"%><!DOCTYPE html>
 <html lang='hu'>
 	<head>
 	<meta charset="UTF-8">
@@ -61,6 +59,9 @@
 						<div class='inlineblock'>
 							<button id='closebutton' class='disabled'>Rendelést lezár</button>
 						</div>
+						<div class='inlineblock'>
+							<button id='removebutton' class='disabled'>Rendelést töröl</button>
+						</div>
 					</div>
 					<fieldset>
 						<legend>Kosár</legend>
@@ -76,20 +77,41 @@
 						<annalog:removeElements selector='.basketItem' />
 						<annalog:concondition model='message' value='OK'>
 							<annalog:fill model='basket' counter='counter' view='basketitem' target='#basket' />
-							<annalog:setclass selector='#closebutton' className='disabled' doIt='remove' />
+							<annalog:setClass selector='#closebutton' className='disabled' doIt='remove' />
 						</annalog:concondition>
 					</annalog:ajax>
 				</annalog:controller>
 				<annalog:controller selector='#userselect' event='change'>
-					<annalog:setclass selector='.addbutton button' className='disabled' doIt='remove' />
+					<annalog:setClass selector='.addbutton button' className='disabled' doIt='remove' />
 					<annalog:ajax url='process/userselect' data='userId:%model.user' responseModel='basket' subjectModel='message' removedReferencesTarget='.basketRef'>
 						<annalog:removeElements selector='.basketItem' />
 						<annalog:concondition model='message' value='OK'>
 							<annalog:fill model='basket' counter='counter' view='basketitem' target='#basket' />
-							<annalog:setclass selector='#closebutton' className='disabled' doIt='remove' />
+							<annalog:setClass selector='#closebutton' className='disabled' doIt='remove' />
+							<annalog:setClass selector='#removebutton' className='disabled' doIt='remove' />
 						</annalog:concondition>
 						<annalog:concondition model='message' value='Empty'>
-							<annalog:setclass selector='#closebutton' className='disabled' doIt='add' />
+							<annalog:setClass selector='#closebutton' className='disabled' doIt='add' />
+							<annalog:setClass selector='#removebutton' className='disabled' doIt='add' />
+						</annalog:concondition>
+					</annalog:ajax>
+				</annalog:controller>
+				<annalog:controller selector='#closebutton' event='click'>
+					<annalog:ajax url='process/closeorder' data='userId:%model.user' responseModel='basket' subjectModel='message' removedReferencesTarget='.basketRef'>
+						<annalog:removeElements selector='.basketItem' />
+						<annalog:concondition model='message' value='OK'>
+							<annalog:setClass selector='#closebutton' className='disabled' doIt='add' />
+							<annalog:setClass selector='#removebutton' className='disabled' doIt='add' />
+							<annalog:setAttribute selector='#userselect' attribute='value' value='0' />
+						</annalog:concondition>
+					</annalog:ajax>
+				</annalog:controller>
+				<annalog:controller selector='#removebutton' event='click'>
+					<annalog:ajax url='process/removeorder' data='userId:%model.user' responseModel='basket' subjectModel='message' removedReferencesTarget='.basketRef'>
+						<annalog:removeElements selector='.basketItem' />
+						<annalog:concondition model='message' value='OK'>
+							<annalog:setClass selector='#closebutton' className='disabled' doIt='add' />
+							<annalog:setClass selector='#removebutton' className='disabled' doIt='add' />
 						</annalog:concondition>
 					</annalog:ajax>
 				</annalog:controller>

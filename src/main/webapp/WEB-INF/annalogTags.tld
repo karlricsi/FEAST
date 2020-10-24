@@ -111,15 +111,29 @@
 	<tag>
 		<name>removeElements</name>
 		<tag-class>hu.annalog.tagHandlers.RemoveElementsTag</tag-class>
-		<body-content>scriptless</body-content>
+		<body-content>empty</body-content>
 		<attribute>
 			<name>selector</name>
 		</attribute>
 	</tag>
 	<tag>
-		<name>setclass</name>
+		<name>setAttribute</name>
+		<tag-class>hu.annalog.tagHandlers.SetAttributeTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>selector</name>
+		</attribute>
+		<attribute>
+			<name>attribute</name>
+		</attribute>
+		<attribute>
+			<name>value</name>
+		</attribute>
+	</tag>
+	<tag>
+		<name>setClass</name>
 		<tag-class>hu.annalog.tagHandlers.SetClassTag</tag-class>
-		<body-content>scriptless</body-content>
+		<body-content>empty</body-content>
 		<attribute>
 			<name>selector</name>
 		</attribute>

@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import hu.karlricsi.entities.AddOrRemoveFood;
 import hu.karlricsi.entities.BasketItem;
+import hu.karlricsi.entities.Order;
 import hu.karlricsi.entities.OrderItem;
 
 public class BasketJDBCImplementation implements BasketDAO<BasketItem> {
@@ -19,6 +20,8 @@ public class BasketJDBCImplementation implements BasketDAO<BasketItem> {
 	private Connection connection;
 	@Autowired
 	DAO<OrderItem> orderItemsDAO;
+	@Autowired
+	DAO<Order> orderDAO;
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -65,6 +68,7 @@ public class BasketJDBCImplementation implements BasketDAO<BasketItem> {
 				return orderItemQuantity == -1 ? orderItemsDAO.insert(orderItem) : orderItemsDAO.update(orderItem);
 			}
 		} catch (DAOException e) {
+			System.out.println(e.getMessage());
 			throw e;
 		}
 	}

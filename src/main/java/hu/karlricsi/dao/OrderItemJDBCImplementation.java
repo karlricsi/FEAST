@@ -62,7 +62,7 @@ public class OrderItemJDBCImplementation implements DAO<OrderItem> {
 		try {
 			connection = dataSource.getConnection();
 			PreparedStatement statement = connection.prepareStatement(
-					"UPDATE `feast`.`order_items` SET `price`=?, `quantity`=? WHERE `order_id`=? AND `food_id`=?");
+					"UPDATE `feast`.`order_items` SET `price`=?,`quantity`=? WHERE `order_id`=? AND `food_id`=?");
 			statement.setDouble(1, orderItem.getPrice());
 			statement.setInt(2, orderItem.getQuantity());
 			statement.setInt(3, orderItem.getOrderId());

@@ -25,8 +25,29 @@ public class OrderJDBCImplementation implements OrderDAO<Order> {
 	}
 
 	@Override
-	public Order find(int id) throws DAOException {
-		throw new UnsupportedOperationException();
+	public Order find(int orderId) throws DAOException {
+		try {
+			connection = dataSource.getConnection();
+			PreparedStatement statement = connection
+					.prepareStatement("SELECT * FROM `feast`.`orders` WHERE `order_id`=?");
+			statement.setInt(1, orderId);
+			ResultSet result = statement.executeQuery();
+			if (result.next()) {
+				return new Order(result.getInt("order_id"), result.getInt("user_id"), result.getDate("date"),
+						result.getBoolean("closed"));
+			}
+			return new Order();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					throw new DAOException(e);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -57,13 +78,48 @@ public class OrderJDBCImplementation implements OrderDAO<Order> {
 	}
 
 	@Override
-	public int update(Order data) throws DAOException {
-		throw new UnsupportedOperationException();
+	public int update(Order order) throws DAOException {
+		try {
+			connection = dataSource.getConnection();
+			PreparedStatement statement = connection
+					.prepareStatement("UPDATE `feast`.`orders` SET `user_id`=?,`date`=?,`closed`=? WHERE `order_id`=?");
+			statement.setInt(1, order.getUser_id());
+			statement.setDate(2, order.getDate());
+			statement.setBoolean(3, order.isClosed());
+			statement.setInt(4, order.getOrderId());
+			return statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					throw new DAOException(e);
+				}
+			}
+		}
 	}
 
 	@Override
-	public int delete(Order data) throws DAOException {
-		throw new UnsupportedOperationException();
+	public int delete(Order order) throws DAOException {
+		try {
+			connection = dataSource.getConnection();
+			PreparedStatement statement = connection
+					.prepareStatement("DELETE FROM `feast`.`orders` WHERE `order_id`=?");
+			statement.setInt(1, order.getOrderId());
+			return statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					throw new DAOException(e);
+				}
+			}
+		}
 	}
 
 	@Override
