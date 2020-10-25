@@ -32,9 +32,10 @@
 				<annalog:model name='user' type='number'>0</annalog:model>
 				<annalog:model name='categories' type='array'>${categories}</annalog:model>
 				<annalog:model name='foods' type='array'>${foods}</annalog:model>
-				<annalog:model name='basket' type='array'>${basket}</annalog:model>
+				<annalog:model name='basket' type='array'>[]</annalog:model>
 				<header>
 					<h1>Tesztfeladat - FEAST - Factory Eating Administration SysTem</h1>
+					<h2>Fogyasztás rögzítés</h2>
 				</header>
 				<nav>
 					<fieldset>

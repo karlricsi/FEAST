@@ -1,4 +1,4 @@
-package hu.karlricsi.dao;
+package hu.karlricsi.feast.dao;
 
 import java.util.List;
 

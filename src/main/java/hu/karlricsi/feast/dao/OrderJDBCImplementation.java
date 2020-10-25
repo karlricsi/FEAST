@@ -1,4 +1,4 @@
-package hu.karlricsi.dao;
+package hu.karlricsi.feast.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import hu.karlricsi.entities.Month;
-import hu.karlricsi.entities.Order;
-import hu.karlricsi.entities.Year;
+import hu.karlricsi.feast.entities.Order;
+import hu.karlricsi.feast.entities.UserComsumption;
 
 public class OrderJDBCImplementation implements OrderDAO<Order> {
 
@@ -152,43 +151,22 @@ public class OrderJDBCImplementation implements OrderDAO<Order> {
 	}
 
 	@Override
-	public List<Year> findYearsContainOrders() throws DAOException {
+	public List<UserComsumption> getUserConsumptions() throws DAOException {
 		try {
 			connection = dataSource.getConnection();
-			PreparedStatement statement = connection.prepareStatement(
-					"SELECT YEAR(`date`) as `year` FROM `feast`.`orders` GROUP BY `year` ORDER BY `year`");
+			PreparedStatement statement = connection
+					.prepareStatement("SELECT `sums`.`name`,SUM(`sums`.`sum`) AS `sum` FROM ("
+							+ "SELECT `users`.`name`,SUM(`order_items`.`price`*`order_items`.`quantity`) AS `sum` FROM `feast`.`order_items` "
+							+ "INNER JOIN `feast`.`orders`ON `orders`.`order_id`=`order_items`.`order_id` "
+							+ "INNER JOIN `feast`.`users` ON `orders`.`user_id`=`users`.`user_id` "
+							+ "WHERE MONTH(`orders`.`date`)=MONTH(NOW()) AND `closed`=true "
+							+ "GROUP BY `order_items`.`order_id`) AS `sums` GROUP BY `sums`.`name`");
 			ResultSet result = statement.executeQuery();
-			List<Year> years = new ArrayList<>();
+			List<UserComsumption> consumptions = new ArrayList<>();
 			while (result.next()) {
-				years.add(new Year(result.getInt("year")));
+				consumptions.add(new UserComsumption(result.getString("name"), result.getDouble("sum")));
 			}
-			return years;
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					throw new DAOException(e);
-				}
-			}
-		}
-	}
-
-	@Override
-	public List<Month> findMonthsContainOrders(Year year) throws DAOException {
-		try {
-			connection = dataSource.getConnection();
-			PreparedStatement statement = connection.prepareStatement(
-					"SELECT MONTH(`date`) as `month` FROM `feast`.`orders` WHERE YEAR(`date`)=? GROUP BY `month` ORDER BY `month`");
-			statement.setInt(1, year.getYear());
-			ResultSet result = statement.executeQuery();
-			List<Month> months = new ArrayList<>();
-			while (result.next()) {
-				months.add(new Month(result.getInt("month")));
-			}
-			return months;
+			return consumptions;
 		} catch (SQLException e) {
 			throw new DAOException(e);
 		} finally {

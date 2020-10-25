@@ -11,6 +11,7 @@
 			<annalog:view>
 				<header>
 					<h1>Tesztfeladat - FEAST - Factory Eating Administration SysTem</h1>
+					<h2>Főoldal</h2>
 				</header>
 				<nav>
 					<fieldset>

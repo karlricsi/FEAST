@@ -1,6 +1,8 @@
-package hu.karlricsi;
+package hu.karlricsi.feast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import hu.karlricsi.dao.DAO;
-import hu.karlricsi.dao.DAOException;
-import hu.karlricsi.dao.OrderDAO;
 import hu.annalog.entities.AjaxResponse;
-import hu.karlricsi.dao.BasketDAO;
-import hu.karlricsi.entities.*;
+import hu.karlricsi.feast.dao.BasketDAO;
+import hu.karlricsi.feast.dao.DAO;
+import hu.karlricsi.feast.dao.DAOException;
+import hu.karlricsi.feast.dao.OrderDAO;
+import hu.karlricsi.feast.entities.*;
 
 @Controller
 public class FeastController {
@@ -93,16 +95,6 @@ public class FeastController {
 		return new AjaxResponse<>(basketItems.isEmpty() ? "Empty" : "OK", basketItems);
 	}
 
-	@PostMapping(value = "/process/yearselect", produces = "application/json")
-	public @ResponseBody AjaxResponse<List<Month>> yearSelect(@RequestBody Year year) {
-		List<Month> months = new ArrayList<>();
-		try {
-			months = ordersDAO.findMonthsContainOrders(year);
-		} catch (DAOException e) {
-		}
-		return new AjaxResponse<>(months.isEmpty() ? "Empty" : "OK", months);
-	}
-
 	@RequestMapping("/")
 	public String menu(ModelMap model) {
 		return "menu";
@@ -123,9 +115,6 @@ public class FeastController {
 			foods = foodsDAO.findAll();
 			JSONArray foodsArray = new JSONArray(foods);
 			model.addAttribute("foods", foodsArray.toString());
-			List<OrderItem> basket = new ArrayList<>();
-			JSONArray basketArray = new JSONArray(basket);
-			model.addAttribute("basket", basketArray.toString());
 		} catch (DAOException e) {
 		}
 		return "order";
@@ -133,15 +122,13 @@ public class FeastController {
 
 	@RequestMapping("/workerconsumptionreport")
 	public String workerConsumptionReport(ModelMap model) {
+		final ArrayList<String> months = new ArrayList<>(Arrays.asList("Január", "Február", "Március", "Április",
+				"Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"));
 		try {
-			List<User> users;
-			users = usersDAO.findAll();
-			JSONArray usersArray = new JSONArray(users);
-			model.addAttribute("users", usersArray.toString());
-			List<Year> years;
-			years = ordersDAO.findYearsContainOrders();
-			JSONArray yearsArray = new JSONArray(years);
-			model.addAttribute("years", yearsArray.toString());
+			List<UserComsumption> consumptions = ordersDAO.getUserConsumptions();
+			JSONArray consumptionsArray = new JSONArray(consumptions);
+			model.addAttribute("month", months.get(Calendar.getInstance().get(Calendar.MONTH)));
+			model.addAttribute("consumptions", consumptionsArray);
 		} catch (DAOException e) {
 		}
 		return "workerConsumptionReport";

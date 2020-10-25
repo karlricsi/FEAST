@@ -1,4 +1,4 @@
-package hu.karlricsi.dao;
+package hu.karlricsi.feast.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,8 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import hu.karlricsi.entities.OrderItem;
+
+import hu.karlricsi.feast.entities.OrderItem;
 
 public class OrderItemJDBCImplementation implements DAO<OrderItem> {
 

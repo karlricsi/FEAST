@@ -1,4 +1,4 @@
-package hu.karlricsi;
+package hu.karlricsi.feast;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

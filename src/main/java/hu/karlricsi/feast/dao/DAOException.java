@@ -1,4 +1,4 @@
-package hu.karlricsi.dao;
+package hu.karlricsi.feast.dao;
 
 public class DAOException extends Exception {
 

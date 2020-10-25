@@ -64,6 +64,7 @@ class Tags {
 			this.annalog.models.getModel('al_ajax').setValue(request);
 			request.send(JSON.stringify(data));
 			request.addEventListener('load', _ => {
+				console.log(request.responseText);
 				let response = JSON.parse(request.responseText);
 				if (node.dataset.removedreferencestarget) {
 					let indexes = [];

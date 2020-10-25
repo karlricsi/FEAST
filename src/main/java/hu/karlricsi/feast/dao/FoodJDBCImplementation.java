@@ -1,4 +1,4 @@
-package hu.karlricsi.dao;
+package hu.karlricsi.feast.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import hu.karlricsi.entities.Food;
+
+import hu.karlricsi.feast.entities.Food;
 
 public class FoodJDBCImplementation implements DAO<Food> {
 

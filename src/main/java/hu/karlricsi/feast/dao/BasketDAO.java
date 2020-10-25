@@ -1,7 +1,8 @@
-package hu.karlricsi.dao;
+package hu.karlricsi.feast.dao;
 
 import java.util.List;
-import hu.karlricsi.entities.AddOrRemoveFood;
+
+import hu.karlricsi.feast.entities.AddOrRemoveFood;
 
 public interface BasketDAO<T> {
 

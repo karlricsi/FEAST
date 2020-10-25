@@ -1,4 +1,4 @@
-package hu.karlricsi.entities;
+package hu.karlricsi.feast.entities;
 
 public class BasketItem {
 

@@ -1,9 +1,10 @@
-package hu.karlricsi;
+package hu.karlricsi.feast;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.mysql.cj.jdbc.MysqlDataSource;
-import hu.karlricsi.dao.*;
+
+import hu.karlricsi.feast.dao.*;
 
 @Configuration
 public class FeastConfiguration {
