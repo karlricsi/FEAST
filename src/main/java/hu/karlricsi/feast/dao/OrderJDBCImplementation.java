@@ -9,6 +9,7 @@ import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import hu.karlricsi.feast.entities.Order;
+import hu.karlricsi.feast.entities.ProductConsumption;
 import hu.karlricsi.feast.entities.UserComsumption;
 
 public class OrderJDBCImplementation implements OrderDAO<Order> {
@@ -160,11 +161,39 @@ public class OrderJDBCImplementation implements OrderDAO<Order> {
 							+ "INNER JOIN `feast`.`orders`ON `orders`.`order_id`=`order_items`.`order_id` "
 							+ "INNER JOIN `feast`.`users` ON `orders`.`user_id`=`users`.`user_id` "
 							+ "WHERE MONTH(`orders`.`date`)=MONTH(NOW()) AND `closed`=true "
-							+ "GROUP BY `order_items`.`order_id`) AS `sums` GROUP BY `sums`.`name`");
+							+ "GROUP BY `order_items`.`order_id`) AS `sums` GROUP BY `sums`.`name` ORDER BY `sums`.`name`");
 			ResultSet result = statement.executeQuery();
 			List<UserComsumption> consumptions = new ArrayList<>();
 			while (result.next()) {
 				consumptions.add(new UserComsumption(result.getString("name"), result.getDouble("sum")));
+			}
+			return consumptions;
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					throw new DAOException(e);
+				}
+			}
+		}
+	}
+
+	@Override
+	public List<ProductConsumption> getProductConsumptions() throws DAOException {
+		try {
+			connection = dataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(
+					"SELECT `menu`.`food_name`,SUM(`order_items`.`quantity`) AS `sum` FROM `feast`.`order_items` "
+							+ "INNER JOIN `feast`.`orders`ON `orders`.`order_id`=`order_items`.`order_id` "
+							+ "INNER JOIN `feast`.`menu` ON `order_items`.`food_id`=`menu`.`food_id` "
+							+ "WHERE MONTH(`orders`.`date`)=MONTH(NOW()) GROUP BY `menu`.`food_name` ORDER BY `sum` DESC,`menu`.`food_name`");
+			ResultSet result = statement.executeQuery();
+			List<ProductConsumption> consumptions = new ArrayList<>();
+			while (result.next()) {
+				consumptions.add(new ProductConsumption(result.getString("food_name"), result.getDouble("sum")));
 			}
 			return consumptions;
 		} catch (SQLException e) {

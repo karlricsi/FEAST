@@ -32,6 +32,8 @@ public class FeastController {
 	private OrderDAO<Order> ordersDAO;
 	@Autowired
 	private BasketDAO<BasketItem> basketDAO;
+	private final ArrayList<String> months = new ArrayList<>(Arrays.asList("Január", "Február", "Március", "Április",
+			"Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"));
 
 	@PostMapping(value = "/process/addfood", produces = "application/json")
 	public @ResponseBody AjaxResponse<List<BasketItem>> addFood(@RequestBody AddOrRemoveFood food) {
@@ -122,8 +124,6 @@ public class FeastController {
 
 	@RequestMapping("/workerconsumptionreport")
 	public String workerConsumptionReport(ModelMap model) {
-		final ArrayList<String> months = new ArrayList<>(Arrays.asList("Január", "Február", "Március", "Április",
-				"Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"));
 		try {
 			List<UserComsumption> consumptions = ordersDAO.getUserConsumptions();
 			JSONArray consumptionsArray = new JSONArray(consumptions);
@@ -132,6 +132,18 @@ public class FeastController {
 		} catch (DAOException e) {
 		}
 		return "workerConsumptionReport";
+	}
+
+	@RequestMapping("/productconsumptionreport")
+	public String productConsumptionReport(ModelMap model) {
+		try {
+			List<ProductConsumption> consumptions = ordersDAO.getProductConsumptions();
+			JSONArray consumptionsArray = new JSONArray(consumptions);
+			model.addAttribute("month", months.get(Calendar.getInstance().get(Calendar.MONTH)));
+			model.addAttribute("consumptions", consumptionsArray);
+		} catch (DAOException e) {
+		}
+		return "productConsumptionReport";
 	}
 
 }
