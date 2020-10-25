@@ -118,6 +118,8 @@ public class FeastController {
 			JSONArray foodsArray = new JSONArray(foods);
 			model.addAttribute("foods", foodsArray.toString());
 		} catch (DAOException e) {
+			model.addAttribute("error", e.getMessage());
+			return "error";
 		}
 		return "order";
 	}
@@ -130,6 +132,8 @@ public class FeastController {
 			model.addAttribute("month", months.get(Calendar.getInstance().get(Calendar.MONTH)));
 			model.addAttribute("consumptions", consumptionsArray);
 		} catch (DAOException e) {
+			model.addAttribute("error", e.getMessage());
+			return "error";
 		}
 		return "workerConsumptionReport";
 	}
@@ -142,6 +146,8 @@ public class FeastController {
 			model.addAttribute("month", months.get(Calendar.getInstance().get(Calendar.MONTH)));
 			model.addAttribute("consumptions", consumptionsArray);
 		} catch (DAOException e) {
+			model.addAttribute("error", e.getMessage());
+			return "error";
 		}
 		return "productConsumptionReport";
 	}
