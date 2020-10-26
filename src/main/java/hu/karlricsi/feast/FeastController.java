@@ -102,7 +102,7 @@ public class FeastController {
 		return "menu";
 	}
 
-	@RequestMapping("/order")
+	@RequestMapping("order")
 	public String order(ModelMap model) {
 		try {
 			List<User> users;
@@ -124,7 +124,7 @@ public class FeastController {
 		return "order";
 	}
 
-	@RequestMapping("/workerconsumptionreport")
+	@RequestMapping("workerconsumptionreport")
 	public String workerConsumptionReport(ModelMap model) {
 		try {
 			List<UserComsumption> consumptions = ordersDAO.getUserConsumptions();
@@ -138,7 +138,7 @@ public class FeastController {
 		return "workerConsumptionReport";
 	}
 
-	@RequestMapping("/productconsumptionreport")
+	@RequestMapping("productconsumptionreport")
 	public String productConsumptionReport(ModelMap model) {
 		try {
 			List<ProductConsumption> consumptions = ordersDAO.getProductConsumptions();

@@ -17,9 +17,9 @@
 					<fieldset>
 						<legend>Oldalak</legend>
 						<ul>
-							<li><a href='/order'>Fogyasztás rögzítés</a></li>
-							<li><a href='/workerconsumptionreport'>Dolgozó fogyasztás riport</a></li>
-							<li><a href='/productconsumptionreport'>Termék fogyás riport</a></li>
+							<li><a href='/FEAST/order'>Fogyasztás rögzítés</a></li>
+							<li><a href='/FEAST/workerconsumptionreport'>Dolgozó fogyasztás riport</a></li>
+							<li><a href='/FEAST/productconsumptionreport'>Termék fogyás riport</a></li>
 						</ul>
 					</fieldset>
 				</nav>

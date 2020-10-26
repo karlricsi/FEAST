@@ -36,9 +36,9 @@
 					<fieldset>
 						<legend>Oldalak</legend>
 						<ul>
-							<li><a href='/'>Főoldal</a></li>
-							<li><a href='/order'>Fogyasztás rögzítés</a></li>
-							<li><a href='/workerconsumptionreport'>Dolgozói fogyasztás riport</a></li>
+							<li><a href='/FEAST/'>Főoldal</a></li>
+							<li><a href='/FEAST/order'>Fogyasztás rögzítés</a></li>
+							<li><a href='/FEAST/workerconsumptionreport'>Dolgozói fogyasztás riport</a></li>
 						</ul>
 					</fieldset>
 				</nav>

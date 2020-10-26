@@ -7,14 +7,12 @@
 		<script src='js/annalogJsTags.js'></script>
 		<style>
 #menudiv {
-	width: calc(70% - 10px);
+	width: 70%;
 	margin: 0;
 	padding: 5px;
 }
 #basketdiv {
-	width: calc(30% - 10px);
 	margin: 0;
-	position: absolute;
 	padding: 5px;
 }
 .inlineblock {
@@ -22,6 +20,17 @@
 }
 .disabled {
 	display: none;
+}
+main {
+	display: table;
+	width: 100%;
+}
+#table-row {
+	display: table-row;
+	width: 100%;
+}
+.cell {
+	display: table-cell;
 }
 		</style>
 	</head>
@@ -41,46 +50,50 @@
 					<fieldset>
 						<legend>Oldalak</legend>
 						<ul>
-							<li><a href='/'>Főoldal</a></li>
-							<li><a href='/workerconsumptionreport'>Dolgozó fogyasztás riport</a></li>
-							<li><a href='/productconsumptionreport'>Termék fogyás riport</a></li>
+							<li><a href='/FEAST/'>Főoldal</a></li>
+							<li><a href='/FEAST/workerconsumptionreport'>Dolgozó fogyasztás riport</a></li>
+							<li><a href='/FEAST/productconsumptionreport'>Termék fogyás riport</a></li>
 						</ul>
 					</fieldset>
 				</nav>
 				<main>
-					<div class='inlineblock' id='menudiv'><fieldset>
-						<legend>Étlap</legend>
-						<ul id='menu'>
-						</ul>
-					</fieldset></div>
-					<div class='inlineblock' id='basketdiv'>
-						<label for='userselect'>Dolgozó: </label>
-						<select id='userselect' data-model='user'>
-							<option disabled selected value='0'>- Válassz -</option>
-						</select>
-						<div>
-							<div class='inlineblock'>
-								<div>
-									Tételek száma: 
-									<span data-model='basket' data-operation='SUM(basket,quantity)'></span>
-								</div>
-								<div>
-									Összesen: 
-									<span data-model='basket' data-operation='SUMPRODUCT(basket,price,quantity)'></span>
-									Ft
-								</div>
-							</div>
-							<div class='inlineblock'>
-								<button id='closebutton' class='disabled'>Rendelést lezár</button>
-							</div>
-							<div class='inlineblock'>
-								<button id='removebutton' class='disabled'>Rendelést töröl</button>
-							</div>
+					<div id='table-row'>
+						<div class='cell' id='menudiv'>
+							<fieldset>
+								<legend>Étlap</legend>
+								<ul id='menu'>
+								</ul>
+							</fieldset>
 						</div>
-						<fieldset>
-							<legend>Kosár</legend>
-							<div id='basket'></div>
-						</fieldset>
+						<div class='cell' id='basketdiv'>
+							<label for='userselect'>Dolgozó: </label>
+							<select id='userselect' data-model='user'>
+								<option disabled selected value='0'>- Válassz -</option>
+							</select>
+							<div>
+								<div class='inlineblock'>
+									<div>
+										Tételek száma: 
+										<span data-model='basket' data-operation='SUM(basket,quantity)'></span>
+									</div>
+									<div>
+										Összesen: 
+										<span data-model='basket' data-operation='SUMPRODUCT(basket,price,quantity)'></span>
+										Ft
+									</div>
+								</div>
+								<div class='inlineblock'>
+									<button id='closebutton' class='disabled'>Rendelést lezár</button>
+								</div>
+								<div class='inlineblock'>
+									<button id='removebutton' class='disabled'>Rendelést töröl</button>
+								</div>
+							</div>
+							<fieldset>
+								<legend>Kosár</legend>
+								<div id='basket'></div>
+							</fieldset>
+						</div>
 					</div>
 				</main>
 				<annalog:fill model='users' counter='counter' view='user' target='#userselect' />
@@ -93,6 +106,7 @@
 						<annalog:concondition model='message' value='OK'>
 							<annalog:fill model='basket' counter='counter' view='basketitem' target='#basket' />
 							<annalog:setClass selector='#closebutton' className='disabled' doIt='remove' />
+							<annalog:setClass selector='#removebutton' className='disabled' doIt='remove' />
 						</annalog:concondition>
 					</annalog:ajax>
 				</annalog:controller>

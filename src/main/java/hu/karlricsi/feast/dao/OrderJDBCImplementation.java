@@ -189,7 +189,8 @@ public class OrderJDBCImplementation implements OrderDAO<Order> {
 					"SELECT `menu`.`food_name`,SUM(`order_items`.`quantity`) AS `sum` FROM `feast`.`order_items` "
 							+ "INNER JOIN `feast`.`orders`ON `orders`.`order_id`=`order_items`.`order_id` "
 							+ "INNER JOIN `feast`.`menu` ON `order_items`.`food_id`=`menu`.`food_id` "
-							+ "WHERE MONTH(`orders`.`date`)=MONTH(NOW()) GROUP BY `menu`.`food_name` ORDER BY `sum` DESC,`menu`.`food_name`");
+							+ "WHERE MONTH(`orders`.`date`)=MONTH(NOW())  AND `closed`=true "
+							+ "GROUP BY `menu`.`food_name` ORDER BY `sum` DESC,`menu`.`food_name`");
 			ResultSet result = statement.executeQuery();
 			List<ProductConsumption> consumptions = new ArrayList<>();
 			while (result.next()) {
